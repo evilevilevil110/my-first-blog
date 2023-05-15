@@ -3,25 +3,60 @@
         <title>Wesker's Django Blog testing</title>
     </head>
     <body>
-        <div>
-            <h1><a href="">Wesker's Django Blog testing</a></h1>
-        </div>
+            {% for post in posts %}
+                <div>
+                    <p>published: {{ post.published_date }}</p>
+                    <h1><a href="">{{ post.title }}</a></h1>
+                    <p>{{ post.text|linebreaksbr }}</p>
+                </div>
+            {% endfor %}
 
-        <div>
-            <p>published: 20230501 3:30</p>
-            <h2><a href="">My first post_Digital&Client engineering</a></h2>
-            <p>this is my first django post</p>
-        </div>
+        <div id="chat-container"></div>
+        <script src="https://cdn.jsdelivr.net/npm/openai/src/index.js"></script>
+        <script>
+                // 初始化 ChatGPT
+                const chatGpt = new openai.ChatCompletion({
+                      model: "gpt-3.5-turbo",
+                      token: "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",
+                      temperature: 0.6,
+                    maxTokens: 50,
+                    });
 
-        <div>
-            <p>published: 20230512 3:32</p>
-            <h2><a href="">My second post_Digital&Client engineering</a></h2>
-            <p>this is my second django post</p>
-        </div>
-        <div>
-            <p>published: 20230515 9:45</p>
-            <h2><a href="">Project Covid-19</a></h2>
-            <p>ask ChatGPT how to prevent from covid</p>
-        </div>
+                // 处理用户输入和模型响应
+                async function sendMessage(message) {
+                const chatContainer = document.getElementById("chat-container");
+
+                // 显示用户消息
+                const userMessage = document.createElement("p");
+                userMessage.innerText = "> " + message;
+                chatContainer.appendChild(userMessage);
+
+                // 发送用户消息到 ChatGPT
+                const response = await chatGpt.complete(message);
+
+               // 显示模型响应
+               const modelMessage = document.createElement("p");
+                     modelMessage.innerText = response.choices[0].message.content;
+                     chatContainer.appendChild(modelMessage);
+                     }
+        </script>
+        <input type="text" id="user-input" placeholder="请输入消息">
+        <button onclick="sendMessage(document.getElementById('user-input').value)">发送</button>
     </body>
+
+    <head>
+          <title>ChatGPT小组件</title>
+          <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+    <body>
+       <div id="chat-widget">
+          <div id="chat-container"></div>
+          <div id="input-container">
+          <input type="text" id="user-input" placeholder="请输入消息">
+          <button onclick="sendMessage()">发送</button>
+          </div>
+       </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
