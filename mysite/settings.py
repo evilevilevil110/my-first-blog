@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+import sqlite3
+sqlite3.dbapi2.register_converter('VARCHAR', lambda b: b.decode(errors='ignore'))
+#处理数据库编码问题
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
